@@ -127,6 +127,71 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
@@ -156,7 +221,14 @@
         </header>
 
         <div class="post-content">
-            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import</span><br></pre></td></tr></table></figure>
+            <h3 id="移位变换函数"><a href="#移位变换函数" class="headerlink" title="移位变换函数"></a>移位变换函数</h3><p>函数输入设置为明文与移动位数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Caesar</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">shift_transform</span>(<span class="params">input_m, shift</span>):  </span><br><span class="line"><span class="comment"># 移位变换函数（输入明文以及移位数）</span></span><br><span class="line">    output_c = <span class="string">&quot;&quot;</span>  </span><br><span class="line">    <span class="comment"># 定义初始的输出字符串为空</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(input_m)):  </span><br><span class="line">        char = input_m[i]  </span><br><span class="line">        <span class="comment"># 区分大小写后进行移位变换</span></span><br><span class="line">        <span class="keyword">if</span> char.isupper():</span><br><span class="line">            <span class="comment"># 大写字母的ASCII从65开始</span></span><br><span class="line">            output_c += <span class="built_in">chr</span>((<span class="built_in">ord</span>(char) + shift - <span class="number">65</span>) % <span class="number">26</span> + <span class="number">65</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 小写字母的ASCII从97开始</span></span><br><span class="line">            output_c += <span class="built_in">chr</span>((<span class="built_in">ord</span>(char) + shift - <span class="number">97</span>) % <span class="number">26</span> + <span class="number">97</span>)</span><br><span class="line">    <span class="keyword">return</span> output_c  </span><br></pre></td></tr></table></figure>
+
+<h3 id="实验测试"><a href="#实验测试" class="headerlink" title="实验测试"></a>实验测试</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Message_test = <span class="string">&quot;zaizhelishurunixiangyaodemingwenxinxi&quot;</span>  <span class="comment"># 在这里输入你想要的铭文</span></span><br><span class="line">shift_num = <span class="number">10</span>  <span class="comment"># 在这里设置移位数</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;原始字符串为: &quot;</span> + Message_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;移位数: &quot;</span> + <span class="built_in">str</span>(shift_num))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;移位变换后的字符串为: &quot;</span> + shift_transform(Message_test, shift_num))</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">原始字符串为: zaizhelishurunixiangyaodemingwenxinxi</span><br><span class="line">移位数: 10</span><br><span class="line">移位变换后的字符串为: jksjrovscrebexshskxqikynowsxqgoxhsxhs</span><br></pre></td></tr></table></figure>
+
+
         </div>
 
         
@@ -207,7 +279,7 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/11/16/%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2/">仿射变换</a>
+                <a class="prev" rel="prev" href="/2023/11/16/%E5%A4%9A%E8%A1%A8%E4%BB%A3%E6%8D%A2%E5%AF%86%E7%A0%81/">多表代换密码</a>
             
             
         </section>

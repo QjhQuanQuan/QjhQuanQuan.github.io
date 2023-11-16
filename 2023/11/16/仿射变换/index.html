@@ -127,6 +127,71 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
@@ -140,7 +205,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">November 16, 2023&nbsp;&nbsp;9:53:46</a>
+                        Date: <a href="#">November 16, 2023&nbsp;&nbsp;10:10:46</a>
                         </span>
                     
                     
@@ -156,8 +221,15 @@
         </header>
 
         <div class="post-content">
-            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span></span><br></pre></td></tr></table></figure>
+            <h3 id="仿射变换加密函数"><a href="#仿射变换加密函数" class="headerlink" title="仿射变换加密函数"></a>仿射变换加密函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 
+<h3 id="仿射变换解密函数"><a href="#仿射变换解密函数" class="headerlink" title="仿射变换解密函数"></a>仿射变换解密函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="实验测试"><a href="#实验测试" class="headerlink" title="实验测试"></a>实验测试</h3><h4 id="加密文件"><a href="#加密文件" class="headerlink" title="加密文件"></a>加密文件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="解密文件"><a href="#解密文件" class="headerlink" title="解密文件"></a>解密文件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p>这里不做展示了，结果会出现在存放加解密数据的txt文件中。</p>
 
         </div>
 
@@ -209,10 +281,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/11/16/%E5%A4%9A%E8%A1%A8%E4%BB%A3%E6%8D%A2%E5%AF%86%E7%A0%81/">多表代换密码</a>
             
-            
-            <a class="next" rel="next" href="/2023/11/16/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/">凯撒密码</a>
+            <a class="next" rel="next" href="/2023/11/16/RSA%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95/">RSA密码算法</a>
             
         </section>
 
