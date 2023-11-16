@@ -127,6 +127,71 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
@@ -140,7 +205,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">November 16, 2023&nbsp;&nbsp;9:55:42</a>
+                        Date: <a href="#">November 16, 2023&nbsp;&nbsp;10:30:56</a>
                         </span>
                     
                     
@@ -156,7 +221,15 @@
         </header>
 
         <div class="post-content">
-            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span></span><br></pre></td></tr></table></figure>
+            <h2 id="多表代换密码原理"><a href="#多表代换密码原理" class="headerlink" title="多表代换密码原理"></a>多表代换密码原理</h2><h2 id="代码部分："><a href="#代码部分：" class="headerlink" title="代码部分："></a>代码部分：</h2><h3 id="引入random库"><a href="#引入random库" class="headerlink" title="引入random库"></a>引入random库</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建多表代换函数"><a href="#创建多表代换函数" class="headerlink" title="创建多表代换函数"></a>创建多表代换函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Create_Tables</span>(<span class="params">key</span>):</span><br><span class="line">    tables = []  <span class="comment"># 初始化一个空列表用于存储表</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> key:  <span class="comment"># 遍历密钥中的每个字符</span></span><br><span class="line">        random.seed(k)  <span class="comment"># 使用密钥字符作为随机种子</span></span><br><span class="line">        table = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">256</span>))  <span class="comment"># 创建一个包含0-255的列表</span></span><br><span class="line">        random.shuffle(table)  <span class="comment"># 随机打乱这个列表</span></span><br><span class="line">        tables.append(table)  <span class="comment"># 将打乱后的列表添加到tables中</span></span><br><span class="line">    <span class="keyword">return</span> tables</span><br></pre></td></tr></table></figure>
+
+<h3 id="加密函数"><a href="#加密函数" class="headerlink" title="加密函数"></a>加密函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Mts_Encrypt</span>(<span class="params">tables, Message_test</span>):</span><br><span class="line">    Cipher_test = []  <span class="comment"># 初始化一个空列表用于存储加密后的字符</span></span><br><span class="line">    <span class="keyword">for</span> i, char <span class="keyword">in</span> <span class="built_in">enumerate</span>(Message_test):  <span class="comment"># 遍历明文中的每个字符</span></span><br><span class="line">        table = tables[i % <span class="built_in">len</span>(tables)]  <span class="comment"># 选择一个表用于加密</span></span><br><span class="line">        Cipher_test.append(table[<span class="built_in">ord</span>(char)])  <span class="comment"># 将字符转换为ASCII码，然后使用表进行加密，加密后的结果添加到Cipher_test中</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(Cipher_test)  <span class="comment"># 返回加密后的字节串</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="解密函数"><a href="#解密函数" class="headerlink" title="解密函数"></a>解密函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Mts_Decrypt</span>(<span class="params">tables, Cipher_test</span>):</span><br><span class="line">    Message_test = []  <span class="comment"># 初始化一个空列表用于存储解密后的字符</span></span><br><span class="line">    <span class="keyword">for</span> i, char <span class="keyword">in</span> <span class="built_in">enumerate</span>(Cipher_test):  <span class="comment"># 遍历密文中的每个字符</span></span><br><span class="line">        table = tables[i % <span class="built_in">len</span>(tables)]  <span class="comment"># 选择一个表用于解密</span></span><br><span class="line">        Message_test.append(<span class="built_in">chr</span>(table.index(char)))  <span class="comment"># 使用表进行解密，解密后的结果转换为字符，然后添加到Message_test中</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(Message_test)  <span class="comment"># 返回解密后的字符串</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="实验测试"><a href="#实验测试" class="headerlink" title="实验测试"></a>实验测试</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">key = <span class="string">&quot;secret&quot;</span>  <span class="comment"># 定义密钥</span></span><br><span class="line">tables = Create_Tables(key)  <span class="comment"># 使用密钥创建表</span></span><br><span class="line">Message_test = <span class="string">&quot;IAMQJH&quot;</span>  <span class="comment"># 定义要加密的明文</span></span><br><span class="line">Cipher_test = Mts_Encrypt(tables, Message_test)  <span class="comment"># 使用表进行加密</span></span><br><span class="line"><span class="built_in">print</span>(Cipher_test)  <span class="comment"># 打印加密后的结果</span></span><br><span class="line">Mts_Decrypted = Mts_Decrypt(tables, Cipher_test)  <span class="comment"># 使用表进行解密</span></span><br><span class="line"><span class="built_in">print</span>(Mts_Decrypted)  <span class="comment"># 打印解密后的结果</span></span><br></pre></td></tr></table></figure>
 
 
         </div>
@@ -209,10 +282,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/11/16/DES%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95/">DES密码算法</a>
             
-            
-            <a class="next" rel="next" href="/2023/11/16/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81/">凯撒密码</a>
+            <a class="next" rel="next" href="/2023/11/16/%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2/">仿射变换</a>
             
         </section>
 
