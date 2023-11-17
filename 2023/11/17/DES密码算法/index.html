@@ -221,7 +221,7 @@
         </header>
 
         <div class="post-content">
-            <h2 id="DES加密算法原理"><a href="#DES加密算法原理" class="headerlink" title="DES加密算法原理"></a>DES加密算法原理</h2><p><img src="/pic/whole.jpg" alt="whole"></p>
+            <h2 id="DES加密算法原理"><a href="#DES加密算法原理" class="headerlink" title="DES加密算法原理"></a>DES加密算法原理</h2><p><img src="/pic/DES/whole.jpg" alt="whole"></p>
 <h3 id="1-初始置换"><a href="#1-初始置换" class="headerlink" title="1. 初始置换"></a>1. 初始置换</h3><h4 id="a-初始置换-IP"><a href="#a-初始置换-IP" class="headerlink" title="(a) 初始置换 IP"></a>(a) 初始置换 IP</h4><div class="table-container">
 <table>
 <thead>
@@ -527,13 +527,13 @@
 </table>
 </div>
 <h3 id="2-轮结构"><a href="#2-轮结构" class="headerlink" title="2. 轮结构"></a>2. 轮结构</h3><p>下图是DES加密算法的轮结构</p>
-<p><img src="/pic/DES轮.jpg" alt="DES轮结构"></p>
+<p><img src="/pic/DES/DES轮.jpg" alt="DES轮结构"></p>
 <p>每轮的变换可由如下公式表示：</p>
 <script type="math/tex; mode=display">
 L_i = R_{i-1}\\
-R_i = L_{i-1} \oplus F\,(R_{i-1},\ K_i)</script><p><img src="/pic/FRK函数.png" alt="函数FRK"> </p>
+R_i = L_{i-1} \oplus F\,(R_{i-1},\ K_i)</script><p><img src="/pic/DES/FRK函数.png" alt="函数FRK"> </p>
 <p>其中，K~i~ 为48比特，函数F(R，K) 为 32比特明文经E拓展为48比特后，与置换选择2后的48比特密钥进行异或运算，再经过s盒以及P置换后的结果。</p>
-<p><img src="/pic/S盒.png" alt="S盒"></p>
+<p><img src="/pic/DES/S盒.png" alt="S盒"></p>
 <p>对于S盒，有6比特输入，第1和第6比特形成的2进制数用于选定行，中间四个比特用来选定列。</p>
 <h3 id="3-密钥的产生"><a href="#3-密钥的产生" class="headerlink" title="3. 密钥的产生"></a>3. 密钥的产生</h3><h4 id="a-置换选择-1"><a href="#a-置换选择-1" class="headerlink" title="(a) 置换选择 1"></a>(a) 置换选择 1</h4><div class="table-container">
 <table>
