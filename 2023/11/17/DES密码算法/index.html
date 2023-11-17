@@ -531,7 +531,7 @@
 <p>每轮的变换可由如下公式表示：</p>
 <script type="math/tex; mode=display">
 L_i = R_{i-1}\\
-R_i = L_{i-1} \oplus F\,(R_{i-1},\ K_i)</script><p><img src="/pic/函数F_RK.png" alt="函数F(R,K)"> </p>
+R_i = L_{i-1} \oplus F\,(R_{i-1},\ K_i)</script><p><img src="/pic/FRK函数.png" alt="函数FRK"> </p>
 <p>其中，K~i~ 为48比特，函数F(R，K) 为 32比特明文经E拓展为48比特后，与置换选择2后的48比特密钥进行异或运算，再经过s盒以及P置换后的结果。</p>
 <p><img src="/pic/S盒.png" alt="S盒"></p>
 <p>对于S盒，有6比特输入，第1和第6比特形成的2进制数用于选定行，中间四个比特用来选定列。</p>
