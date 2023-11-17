@@ -17,7 +17,7 @@
 
 
 
-<title>背包密码体制 | quanquan</title>
+<title>国密SM2算法 | quanquan</title>
 
 
 
@@ -44,6 +44,45 @@
 
     
     
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
         
     
 
@@ -131,7 +170,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">背包密码体制</h1>
+            <h1 class="post-title">国密SM2算法</h1>
             
                 <div class="post-meta">
                     
@@ -140,7 +179,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">November 16, 2023&nbsp;&nbsp;10:00:09</a>
+                        Date: <a href="#">November 17, 2023&nbsp;&nbsp;12:13:58</a>
                         </span>
                     
                     
@@ -156,8 +195,7 @@
         </header>
 
         <div class="post-content">
-            <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
+            
         </div>
 
         
@@ -171,7 +209,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://qjhquanquan.github.io/2023/11/16/%E8%83%8C%E5%8C%85%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/">http://qjhquanquan.github.io/2023/11/16/%E8%83%8C%E5%8C%85%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/</a></span>
+                        <span><a href="http://qjhquanquan.github.io/2023/11/17/%E5%9B%BD%E5%AF%86SM2%E7%AE%97%E6%B3%95/">http://qjhquanquan.github.io/2023/11/17/%E5%9B%BD%E5%AF%86SM2%E7%AE%97%E6%B3%95/</a></span>
                     </p>
                 
                 
@@ -195,7 +233,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/"># 公钥密码</a>
+                        <a href="/tags/%E5%9B%BD%E5%AF%86%E7%AE%97%E6%B3%95/"># 国密算法</a>
                     
                         
                 </span>
@@ -208,10 +246,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/11/16/RSA%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95/">RSA密码算法</a>
+                <a class="prev" rel="prev" href="/2023/11/17/%E5%9B%BD%E5%AF%86SM4%E7%AE%97%E6%B3%95/">国密SM4算法</a>
             
             
-            <a class="next" rel="next" href="/2023/11/16/IDEA%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95/">IDEA密码算法</a>
+            <a class="next" rel="next" href="/2023/11/16/%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2/">仿射变换</a>
             
         </section>
 
