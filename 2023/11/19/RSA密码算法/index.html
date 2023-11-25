@@ -272,10 +272,10 @@
 <h4 id="RSA-算法证明"><a href="#RSA-算法证明" class="headerlink" title="RSA 算法证明"></a>RSA 算法证明</h4><p>（1）m 和 n 互素</p>
 <p>利用欧拉定理证明：</p>
 <p>​    $c = m^e \ mod \ n$ </p>
-<p>​    $c^d\ mod\ n = m^{ed}\ mod\ n$                             # 等式两边同时取 d 次幂， 再取模；</p>
-<p>​            $= m^{k\varphi(n)+1}\ mod\ n$                     # 因为 e，d 满足$e\cdot d\ mod\ \varphi(\,n\,) = 1$ ，所以 $ed = k\varphi(n)+1$ </p>
-<p>​            $= m\ (m^{\varphi(n)}\ mod\ n)^k\ mod\ n$     # 乘法取模的结合律   $m^{\varphi(n)}\ \equiv 1\ mod\ n $ </p>
-<p>​            $= m\ mod\ n$                     # 因为 m 和 n 互素，所以根据欧拉定理，有$m^{\varphi(n)}\ mod\ n = 1$  </p>
+<p>​    $c^d\ mod\ n = m^{ed}\ mod\ n$                                                                       # 等式两边同时取 d 次幂， 再取模；</p>
+<p>​            $= m^{k\varphi(n)+1}\ mod\ n$                                                              # 因为 e，d 满足$e\cdot d\ mod\ \varphi(\,n\,) = 1$ ，所以 $ed = k\varphi(n)+1$ </p>
+<p>​            $= m\ (m^{\varphi(n)}\ mod\ n)^k\ mod\ n$                                             # 乘法取模的结合律   $m^{\varphi(n)}\ \equiv 1\ mod\ n $ </p>
+<p>​            $= m\ mod\ n$                                                              # 因为 m 和 n 互素，所以根据欧拉定理，有$m^{\varphi(n)}\ mod\ n = 1$  </p>
 <p>（2）m 和 n 不互素</p>
 <p>因为m，n不互素，意味着m，n有公约数。故 m 只能是 p 或 q 的倍数。由于 m&lt;n , 所以 m 不能是 pq 的倍数。因此无论 m 是 p 的倍数还是 q 的倍数，只需要证明其一，另一个同理可证。</p>
 <p>不妨设 m = tp , 其中 t 为整数，则 gcd(m, q) = 1. 由欧拉定理：</p>
