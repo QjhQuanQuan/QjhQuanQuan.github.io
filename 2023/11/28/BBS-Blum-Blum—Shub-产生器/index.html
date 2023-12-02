@@ -17,7 +17,7 @@
 
 
 
-<title>国密SM4算法 | quanquan</title>
+<title>BBS(Blum-Blum—Shub)产生器 | quanquan</title>
 
 
 
@@ -44,45 +44,6 @@
 
     
     
-        
-            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    "HTML-CSS": {
-        preferredFont: "TeX",
-        availableFonts: ["STIX","TeX"],
-        linebreaks: { automatic:true },
-        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
-    },
-    tex2jax: {
-        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
-        processEscapes: true,
-        ignoreClass: "tex2jax_ignore|dno",
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        equationNumbers: { autoNumber: "AMS" },
-        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
-        Macros: { href: "{}" }
-    },
-    messageStyle: "none"
-    });
-</script>
-<!-- 给MathJax元素添加has-jax class -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<!-- 通过连接CDN加载MathJax的js代码 -->
-<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
-
         
     
 
@@ -166,11 +127,76 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">国密SM4算法</h1>
+            <h1 class="post-title">BBS(Blum-Blum—Shub)产生器</h1>
             
                 <div class="post-meta">
                     
@@ -179,14 +205,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">November 24, 2023&nbsp;&nbsp;13:14:08</a>
+                        Date: <a href="#">November 28, 2023&nbsp;&nbsp;17:08:51</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/%E7%8E%B0%E4%BB%A3%E5%AF%86%E7%A0%81%E5%AD%A6/">现代密码学</a>
+                                <a href="/categories/%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/">随机数产生器</a>
                             
                         </span>
                     
@@ -195,7 +221,8 @@
         </header>
 
         <div class="post-content">
-            
+            <h3 id="BBS-Blum-Blum—Shub-产生器"><a href="#BBS-Blum-Blum—Shub-产生器" class="headerlink" title="BBS(Blum-Blum—Shub)产生器"></a>BBS(Blum-Blum—Shub)产生器</h3><h3 id="代码部分："><a href="#代码部分：" class="headerlink" title="代码部分："></a>代码部分：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">blum_blum_shub</span>(<span class="params">p, q, seed, n_bits</span>):</span><br><span class="line">    M = p * q</span><br><span class="line">    x = (seed * seed) % M</span><br><span class="line"></span><br><span class="line">    bits = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n_bits):</span><br><span class="line">        x = (x * x) % M</span><br><span class="line">        b = x % <span class="number">2</span></span><br><span class="line">        bits += <span class="built_in">str</span>(b)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bits</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line">p = <span class="number">23</span></span><br><span class="line">q = <span class="number">19</span></span><br><span class="line">seed = <span class="number">2</span></span><br><span class="line">n_bits = <span class="number">10</span></span><br><span class="line">random_bits = blum_blum_shub(p, q, seed, n_bits)</span><br><span class="line"><span class="built_in">print</span>(random_bits)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">BBS算法需要两个大质数p和q，</span></span><br><span class="line"><span class="string">以及一个种子值。</span></span><br><span class="line"><span class="string">这个算法生成的是一个二进制字符串</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
         </div>
 
         
@@ -209,7 +236,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://qjhquanquan.github.io/2023/11/24/%E5%9B%BD%E5%AF%86SM4%E7%AE%97%E6%B3%95/">http://qjhquanquan.github.io/2023/11/24/%E5%9B%BD%E5%AF%86SM4%E7%AE%97%E6%B3%95/</a></span>
+                        <span><a href="http://qjhquanquan.github.io/2023/11/28/BBS-Blum-Blum%E2%80%94Shub-%E4%BA%A7%E7%94%9F%E5%99%A8/">http://qjhquanquan.github.io/2023/11/28/BBS-Blum-Blum%E2%80%94Shub-%E4%BA%A7%E7%94%9F%E5%99%A8/</a></span>
                     </p>
                 
                 
@@ -233,7 +260,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/%E5%9B%BD%E5%AF%86%E7%AE%97%E6%B3%95/"># 国密算法</a>
+                        <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%AF%94%E7%89%B9%E4%BA%A7%E7%94%9F%E5%99%A8/"># 随机比特产生器</a>
                     
                         
                 </span>
@@ -246,10 +273,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/11/28/%E5%9F%BA%E4%BA%8E%E7%BA%BF%E6%80%A7%E5%90%8C%E4%BD%99%E7%9A%84%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/">基于线性同余的伪随机数产生器</a>
+                <a class="prev" rel="prev" href="/2023/11/28/Rabin-%E4%BA%A7%E7%94%9F%E5%99%A8/">Rabin 产生器</a>
             
             
-            <a class="next" rel="next" href="/2023/11/24/%E5%9B%BD%E5%AF%86SM2%E7%AE%97%E6%B3%95/">国密SM2算法</a>
+            <a class="next" rel="next" href="/2023/11/28/ANSI-X9-17%E7%9A%84%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/">ANSI X9.17的伪随机数产生器</a>
             
         </section>
 

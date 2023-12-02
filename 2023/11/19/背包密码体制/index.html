@@ -275,7 +275,7 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><strong>密钥</strong></td>
+<td style="text-align:center"><strong>公钥</strong></td>
 <td style="text-align:center">5</td>
 <td style="text-align:center">8</td>
 <td style="text-align:center">12</td>
@@ -287,13 +287,13 @@
 </table>
 </div>
 <p>密文：12 + 18 + 36 = 66</p>
-<h4 id="密钥的产生"><a href="#密钥的产生" class="headerlink" title="密钥的产生"></a>密钥的产生</h4><h5 id="私钥的产生"><a href="#私钥的产生" class="headerlink" title="私钥的产生"></a>私钥的产生</h5><p>以超递增序列构建背包，并以此序列作为私钥的递增序列。</p>
-<p>eg. {2, 8, 18, 33, 65, 144}</p>
-<h5 id="公钥的产生"><a href="#公钥的产生" class="headerlink" title="公钥的产生"></a>公钥的产生</h5><p>背包密码的公钥由私钥产生，选定 m ，n，满足 m 大于递增背包所有元素之和，且 m 与n 互素。</p>
-<p>私钥: {$a_1$, $a_2$, $a_3$, $a_4$, $a_5$, $a_6$}，   n </p>
+<h4 id="密钥的产生"><a href="#密钥的产生" class="headerlink" title="密钥的产生"></a>密钥的产生</h4><h5 id="私钥的产生"><a href="#私钥的产生" class="headerlink" title="私钥的产生"></a>私钥的产生</h5><p>（1）以超递增序列构建背包   eg. {2, 8, 18, 33, 65, 144}</p>
+<p>（2）选定 m ，n，满足 m 大于递增背包所有元素之和，且 m 与n 互素。</p>
+<h5 id="公钥的产生"><a href="#公钥的产生" class="headerlink" title="公钥的产生"></a>公钥的产生</h5><p>背包密码的公钥由私钥产生。 </p>
+<p>私钥: {$a_1$, $a_2$, $a_3$, $a_4$, $a_5$, $a_6$},   $m$,   $n$  .</p>
 <script type="math/tex; mode=display">
 d_n = a_n\cdot n\ mod\ m</script><p>公钥: {$d_1$, $d_2$, $d_3$, $d_4$, $d_5$, $d_6$} </p>
-<h4 id="加密过程"><a href="#加密过程" class="headerlink" title="加密过程"></a>加密过程</h4><p>（1） 将明文按照背包序列的长度分组</p>
+<h4 id="加密过程"><a href="#加密过程" class="headerlink" title="加密过程"></a>加密过程</h4><p>（1） 将明文按照公钥序列的长度分组</p>
 <p>（2）将序列位置对应为 1 的元素依次取出并求和，每一组皆如此</p>
 <p>（3）得到密文c</p>
 <h4 id="解密过程"><a href="#解密过程" class="headerlink" title="解密过程"></a>解密过程</h4><p>（1）先求出 n 在模 m 下的逆元 $n^{-1}$ 即 $n^{-1}\cdot n\ mod\ m = 1$ </p>
