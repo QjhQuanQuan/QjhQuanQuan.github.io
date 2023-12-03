@@ -127,6 +127,71 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
@@ -147,7 +212,7 @@
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/">随机数产生器</a>
+                                <a href="/categories/%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F/">随机数产生</a>
                             
                         </span>
                     
@@ -156,7 +221,8 @@
         </header>
 
         <div class="post-content">
-            
+            <h3 id="循环加密伪随机数产生器"><a href="#循环加密伪随机数产生器" class="headerlink" title="循环加密伪随机数产生器"></a>循环加密伪随机数产生器</h3><h3 id="代码部分："><a href="#代码部分：" class="headerlink" title="代码部分："></a>代码部分：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">这个程序首先定义了一个XOR循环加密函数，然后定义了一个随机数生成器。</span></span><br><span class="line"><span class="string">生成器生成一个1到100之间的随机数，然后使用一个随机密钥对其进行加密。</span></span><br><span class="line"><span class="string">最后，程序生成并打印了10个加密的随机数。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">xor_cypher</span>(<span class="params">input_string, key</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">hex</span>(<span class="built_in">ord</span>(x) ^ <span class="built_in">ord</span>(y))[<span class="number">2</span>:] <span class="keyword">for</span> (x,y) <span class="keyword">in</span> <span class="built_in">zip</span>(input_string, key))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">random_number_generator</span>():</span><br><span class="line">    number = random.randint(<span class="number">1</span>, <span class="number">100</span>)</span><br><span class="line">    key = <span class="built_in">str</span>(random.randint(<span class="number">1</span>, <span class="number">100</span>))</span><br><span class="line">    encrypted_number = xor_cypher(<span class="built_in">str</span>(number), key)</span><br><span class="line">    <span class="keyword">return</span> encrypted_number</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="built_in">print</span>(random_number_generator())</span><br></pre></td></tr></table></figure>
+
         </div>
 
         
@@ -170,7 +236,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://qunaquanq.gitee.io/2023/11/28/%E5%BE%AA%E7%8E%AF%E5%8A%A0%E5%AF%86%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/">http://qunaquanq.gitee.io/2023/11/28/%E5%BE%AA%E7%8E%AF%E5%8A%A0%E5%AF%86%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/</a></span>
+                        <span><a href="http://qjhquanquan.github.io/2023/11/28/%E5%BE%AA%E7%8E%AF%E5%8A%A0%E5%AF%86%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/">http://qjhquanquan.github.io/2023/11/28/%E5%BE%AA%E7%8E%AF%E5%8A%A0%E5%AF%86%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/</a></span>
                     </p>
                 
                 

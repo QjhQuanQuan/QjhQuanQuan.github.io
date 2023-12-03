@@ -17,7 +17,7 @@
 
 
 
-<title>Shamir门限方案 | quanquan</title>
+<title>Asmuth-Bloom门限分割方案 | quanquan</title>
 
 
 
@@ -127,11 +127,76 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Shamir门限方案</h1>
+            <h1 class="post-title">Asmuth-Bloom门限分割方案</h1>
             
                 <div class="post-meta">
                     
@@ -140,7 +205,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">November 28, 2023&nbsp;&nbsp;17:12:25</a>
+                        Date: <a href="#">November 28, 2023&nbsp;&nbsp;17:12:44</a>
                         </span>
                     
                     
@@ -156,7 +221,8 @@
         </header>
 
         <div class="post-content">
-            
+            <h3 id="Asmuth-Bloom门限分割方案"><a href="#Asmuth-Bloom门限分割方案" class="headerlink" title="Asmuth-Bloom门限分割方案"></a>Asmuth-Bloom门限分割方案</h3><h3 id="代码部分："><a href="#代码部分：" class="headerlink" title="代码部分："></a>代码部分：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sympy <span class="keyword">import</span> randprime, mod_inverse</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_shares_shamir</span>(<span class="params">secret, n, k, prime=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    生成秘密分享的函数（Shamir&#x27;s 秘密共享方案）</span></span><br><span class="line"><span class="string">    :param secret: 要分享的秘密值</span></span><br><span class="line"><span class="string">    :param n: 总共要生成的分享数量</span></span><br><span class="line"><span class="string">    :param k: 恢复秘密所需的最小分享数量</span></span><br><span class="line"><span class="string">    :param prime: 用于生成多项式的素数（如果未提供，则随机生成）</span></span><br><span class="line"><span class="string">    :return: 生成的分享列表</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> prime <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        prime = randprime(<span class="number">2</span>**<span class="number">127</span>, <span class="number">2</span>**<span class="number">128</span>)  <span class="comment"># 随机选择一个素数</span></span><br><span class="line">    coefficients = [secret] + [random.randint(<span class="number">1</span>, prime - <span class="number">1</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(k - <span class="number">1</span>)]  <span class="comment"># 生成 k 个随机系数</span></span><br><span class="line">    shares = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">        share = <span class="built_in">sum</span>((coefficients[j] * i**j) % prime <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(k)) % prime</span><br><span class="line">        shares.append((i, share))</span><br><span class="line">    <span class="keyword">return</span> shares, prime</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">recover_secret_shamir</span>(<span class="params">shares, prime</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    恢复秘密的函数（Shamir&#x27;s 秘密共享方案）</span></span><br><span class="line"><span class="string">    :param shares: 分享列表</span></span><br><span class="line"><span class="string">    :param prime: 用于生成多项式的素数</span></span><br><span class="line"><span class="string">    :return: 恢复的秘密值</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    x = [share[<span class="number">0</span>] <span class="keyword">for</span> share <span class="keyword">in</span> shares]</span><br><span class="line">    y = [share[<span class="number">1</span>] <span class="keyword">for</span> share <span class="keyword">in</span> shares]</span><br><span class="line">    secret = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x)):</span><br><span class="line">        numerator, denominator = <span class="number">1</span>, <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x)):</span><br><span class="line">            <span class="keyword">if</span> i != j:</span><br><span class="line">                numerator = (numerator * -x[j]) % prime</span><br><span class="line">                denominator = (denominator * (x[i] - x[j])) % prime</span><br><span class="line">        lagrange = (y[i] * mod_inverse(denominator, prime) * numerator) % prime</span><br><span class="line">        secret = (secret + lagrange) % prime</span><br><span class="line">    <span class="keyword">return</span> secret</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入</span></span><br><span class="line">secret_shamir = <span class="string">&quot;123abc&quot;</span>  <span class="comment"># 要分享的秘密值</span></span><br><span class="line">n_shamir = <span class="number">5</span>  <span class="comment"># 总共要生成的分享数量</span></span><br><span class="line">k_shamir = <span class="number">3</span>  <span class="comment"># 恢复秘密所需的最小分享数量</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成分享</span></span><br><span class="line">shares_shamir, prime_shamir = generate_shares_shamir(<span class="built_in">int</span>.from_bytes(secret_shamir.encode(), <span class="string">&#x27;big&#x27;</span>), n_shamir, k_shamir)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Generated shares (Shamir&#x27;s):&quot;</span>, shares_shamir)  <span class="comment"># 打印生成的分享</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复秘密</span></span><br><span class="line">recovered_secret_shamir = recover_secret_shamir(shares_shamir[:k_shamir], prime_shamir)  <span class="comment"># 从部分分享中恢复秘密</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Recovered secret (Shamir&#x27;s):&quot;</span>, <span class="built_in">bytes</span>.fromhex(<span class="built_in">hex</span>(recovered_secret_shamir)[<span class="number">2</span>:]).decode(<span class="string">&#x27;utf-8&#x27;</span>))  <span class="comment"># 打印恢复的秘密值</span></span><br></pre></td></tr></table></figure>
+
         </div>
 
         
@@ -170,7 +236,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://qunaquanq.gitee.io/2023/11/28/Shamir%E9%97%A8%E9%99%90%E6%96%B9%E6%A1%88/">http://qunaquanq.gitee.io/2023/11/28/Shamir%E9%97%A8%E9%99%90%E6%96%B9%E6%A1%88/</a></span>
+                        <span><a href="http://qjhquanquan.github.io/2023/11/28/Shamir%E9%97%A8%E9%99%90%E6%96%B9%E6%A1%88/">http://qjhquanquan.github.io/2023/11/28/Shamir%E9%97%A8%E9%99%90%E6%96%B9%E6%A1%88/</a></span>
                     </p>
                 
                 
@@ -194,7 +260,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/%E9%97%A8%E9%99%90%E6%96%B9%E6%A1%88/"># 门限方案</a>
+                        <a href="/tags/%E9%97%A8%E9%99%90%E5%88%86%E5%89%B2%E6%96%B9%E6%A1%88/"># 门限分割方案</a>
                     
                         
                 </span>
