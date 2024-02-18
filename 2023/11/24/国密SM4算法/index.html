@@ -45,45 +45,6 @@
     
     
         
-            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    "HTML-CSS": {
-        preferredFont: "TeX",
-        availableFonts: ["STIX","TeX"],
-        linebreaks: { automatic:true },
-        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
-    },
-    tex2jax: {
-        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
-        processEscapes: true,
-        ignoreClass: "tex2jax_ignore|dno",
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        equationNumbers: { autoNumber: "AMS" },
-        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
-        Macros: { href: "{}" }
-    },
-    messageStyle: "none"
-    });
-</script>
-<!-- 给MathJax元素添加has-jax class -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<!-- 通过连接CDN加载MathJax的js代码 -->
-<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
-
-        
     
 
 
@@ -166,6 +127,71 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
@@ -195,7 +221,9 @@
         </header>
 
         <div class="post-content">
-            
+            <h3 id="SM4-加解密-python-代码"><a href="#SM4-加解密-python-代码" class="headerlink" title="SM4  加解密 python 代码"></a>SM4  加解密 python 代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line"><span class="comment">#导入国密算法sm4包</span></span><br><span class="line"><span class="keyword">from</span> gmssl <span class="keyword">import</span> sm4</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sm4_encode</span>(<span class="params">key, data</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    国密sm4加密</span></span><br><span class="line"><span class="string">    :param key: 密钥</span></span><br><span class="line"><span class="string">    :param data: 原始数据</span></span><br><span class="line"><span class="string">    :return: 密文hex</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    sm4Alg = sm4.CryptSM4()  <span class="comment"># 实例化sm4</span></span><br><span class="line">    sm4Alg.set_key(key.encode(), sm4.SM4_ENCRYPT)  <span class="comment"># 设置密钥</span></span><br><span class="line">    dateStr = <span class="built_in">str</span>(data)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;明文:&quot;</span>, dateStr)</span><br><span class="line">    enRes = sm4Alg.crypt_ecb(dateStr.encode())  <span class="comment"># 开始加密,bytes类型，ecb模式</span></span><br><span class="line">    enHexStr = enRes.<span class="built_in">hex</span>()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;密文:&quot;</span>, enHexStr)</span><br><span class="line">    <span class="keyword">return</span> enHexStr <span class="comment"># 返回十六进制值</span></span><br><span class="line">    <span class="comment"># return encrypt_value.hex()</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sm4_decode</span>(<span class="params">key, data</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    国密sm4解密</span></span><br><span class="line"><span class="string">    :param key: 密钥</span></span><br><span class="line"><span class="string">    :param data: 密文数据</span></span><br><span class="line"><span class="string">    :return: 明文hex</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    sm4Alg = sm4.CryptSM4()  <span class="comment"># 实例化sm4</span></span><br><span class="line">    sm4Alg.set_key(key.encode(), sm4.SM4_DECRYPT)  <span class="comment"># 设置密钥</span></span><br><span class="line">    deRes = sm4Alg.crypt_ecb(<span class="built_in">bytes</span>.fromhex(data))  <span class="comment"># 开始解密。十六进制类型,ecb模式</span></span><br><span class="line">    deHexStr = deRes.decode()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;解密后明文:&quot;</span>, deRes)</span><br><span class="line">    <span class="keyword">return</span> deRes</span><br><span class="line"></span><br><span class="line"><span class="comment">#测试函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    key = <span class="string">&quot;E1A90FB64DDE12AE&quot;</span></span><br><span class="line">    strData = <span class="string">&quot;1234567890abcdef&quot;</span></span><br><span class="line"></span><br><span class="line">    enHexRes = sm4_encode(key,strData)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;解密对象&lt;&quot;</span>, enHexRes, <span class="string">&quot;&gt;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    sm4_decode(key,enHexRes)</span><br><span class="line"></span><br><span class="line"><span class="comment"># main </span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;加解密测试: &quot;</span>)</span><br><span class="line">    test()</span><br></pre></td></tr></table></figure>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">加解密测试: </span><br><span class="line">明文: 1234567890abcdef</span><br><span class="line">密文: dfe55390cd4644938b94f6d6073e370ba7cba2fe75751ce0d170047b92d3ae58</span><br><span class="line">解密对象&lt; dfe55390cd4644938b94f6d6073e370ba7cba2fe75751ce0d170047b92d3ae58 &gt;</span><br><span class="line">解密后明文: b<span class="string">&#x27;1234567890abcdef&#x27;</span></span><br><span class="line"></span><br><span class="line">Process finished with <span class="built_in">exit</span> code 0</span><br></pre></td></tr></table></figure>
+
         </div>
 
         
