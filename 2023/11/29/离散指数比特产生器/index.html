@@ -17,7 +17,7 @@
 
 
 
-<title>ANSI X9.17的伪随机数产生器 | quanquan</title>
+<title>离散指数比特产生器 | quanquan</title>
 
 
 
@@ -196,7 +196,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">ANSI X9.17的伪随机数产生器</h1>
+            <h1 class="post-title">离散指数比特产生器</h1>
             
                 <div class="post-meta">
                     
@@ -205,7 +205,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">November 28, 2023&nbsp;&nbsp;17:07:29</a>
+                        Date: <a href="#">November 29, 2023&nbsp;&nbsp;23:01:02</a>
                         </span>
                     
                     
@@ -221,16 +221,16 @@
         </header>
 
         <div class="post-content">
-            <h3 id="ANSI-X9-17"><a href="#ANSI-X9-17" class="headerlink" title="ANSI X9.17"></a>ANSI X9.17</h3><p>ANSI X9.17是一种伪随机数生成器，是一个美国国家标准协会（American National Standards Institute，ANSI）发布的关于伪随机数生成器的标准。它使用 DES（数据加密标准）或者三重DES作为其底层的加密算法。</p>
-<p>ANSI_X9_17函数的两个参数：</p>
+            <h3 id="离散指数比特产生器"><a href="#离散指数比特产生器" class="headerlink" title="离散指数比特产生器"></a>离散指数比特产生器</h3><p>离散指数分布是一种概率分布，其概率质量函数在非负整数上是指数函数。</p>
+<p>首先定义了一个名为<code>generate_exponential_bits</code>的函数，它接受两个参数：</p>
 <ul>
-<li>seed：用于生成伪随机数的种子。</li>
-<li>key：用于加密的密钥。</li>
+<li>rate：指数分布的速率参数。</li>
+<li>num_bits：需要生成的二进制位数。</li>
 </ul>
-<p>函数的主要逻辑是创建一个DES加密器，并使用系统当前时间作为向量；然后，使用DES加密器对向量进行加密，并与种子进行异或操作，生成伪随机数；最后，将生成的伪随机数作为新的种子，并将其返回。</p>
-<p>最后，生成一个随机的8字节的种子和密钥。</p>
-<h3 id="代码部分："><a href="#代码部分：" class="headerlink" title="代码部分："></a>代码部分：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> DES</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ANSI_X9_17</span>(<span class="params">seed, key</span>):</span><br><span class="line">    <span class="comment"># 使用DES加密算法</span></span><br><span class="line">    des = DES.new(key, DES.MODE_ECB)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># 使用系统当前时间作为向量</span></span><br><span class="line">        dt = struct.pack(<span class="string">&#x27;d&#x27;</span>, time.time())</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 生成伪随机数</span></span><br><span class="line">        xor_result = <span class="built_in">int</span>.from_bytes(des.encrypt(dt), <span class="string">&#x27;big&#x27;</span>) ^ <span class="built_in">int</span>.from_bytes(seed, <span class="string">&#x27;big&#x27;</span>)</span><br><span class="line">        seed = des.encrypt(xor_result.to_bytes(<span class="number">8</span>, <span class="string">&#x27;big&#x27;</span>))</span><br><span class="line">        <span class="keyword">yield</span> struct.unpack(<span class="string">&#x27;Q&#x27;</span>, seed)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化种子和密钥</span></span><br><span class="line">seed = os.urandom(<span class="number">8</span>)</span><br><span class="line">key = os.urandom(<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建生成器</span></span><br><span class="line">generator = ANSI_X9_17(seed, key)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成10个伪随机数</span></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">next</span>(generator))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">9547376894222560941</span><br><span class="line">14573295465363766103</span><br><span class="line">4443221753975775752</span><br><span class="line">166340040852663411</span><br><span class="line">963240850516919363</span><br><span class="line">5943390085879500067</span><br><span class="line">2446485564448679013</span><br><span class="line">13225102827631184018</span><br><span class="line">16245113971492984339</span><br><span class="line">12199582410726500214</span><br><span class="line"></span><br><span class="line">Process finished with <span class="built_in">exit</span> code 0</span><br></pre></td></tr></table></figure>
+<p>函数的主要逻辑是生成一个包含<code>num_bits</code>个二进制位的列表<code>bits</code>。在每次循环中，首先生成一个0到1之间的均匀分布随机数<code>u</code>，然后使用离散指数分布的概率质量函数计算随机数<code>x</code>。接下来，将<code>x</code>转换为一个二进制位（0或1），并将其添加到结果列表<code>bits</code>中。最后，返回生成的二进制字符串。</p>
+<p>离散指数分布的安全性取决于速率参数<code>rate</code>的选择。在实际应用中，需要确保<code>rate</code>是足够大的值，以防止攻击者破解生成的伪随机数。</p>
+<h3 id="代码部分："><a href="#代码部分：" class="headerlink" title="代码部分："></a>代码部分：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_exponential_bits</span>(<span class="params">rate, num_bits</span>):</span><br><span class="line">    bits = []</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_bits):</span><br><span class="line">        u = random.random()  <span class="comment"># 生成0到1之间的均匀分布随机数</span></span><br><span class="line">        x = -math.log(<span class="number">1</span> - u) / rate  <span class="comment"># 从离散指数分布中生成随机数</span></span><br><span class="line">        bit = <span class="number">1</span> <span class="keyword">if</span> x &gt;= <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span>  <span class="comment"># 将随机数转换为比特</span></span><br><span class="line">        bits.append(bit)</span><br><span class="line">    <span class="keyword">return</span> bits</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line">rate = <span class="number">0.5</span>  <span class="comment"># 指数分布的速率参数</span></span><br><span class="line">num_bits = <span class="number">10</span>  <span class="comment"># 要生成的比特数量</span></span><br><span class="line">generated_bits = generate_exponential_bits(rate, num_bits)</span><br><span class="line"><span class="built_in">print</span>(generated_bits)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[1, 0, 1, 1, 1, 0, 1, 1, 1, 1]</span><br><span class="line"></span><br><span class="line">Process finished with <span class="built_in">exit</span> code 0</span><br></pre></td></tr></table></figure>
 
         </div>
 
@@ -264,7 +264,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/%E5%9F%BA%E4%BA%8E%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95%E7%9A%84%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/"># 基于密码算法的伪随机数产生器</a>
+                        <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%AF%94%E7%89%B9%E4%BA%A7%E7%94%9F%E5%99%A8/"># 随机比特产生器</a>
                     
                         
                 </span>
@@ -277,10 +277,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/11/28/BBS-Blum-Blum%E2%80%94Shub-%E4%BA%A7%E7%94%9F%E5%99%A8/">BBS(Blum-Blum—Shub)产生器</a>
+                <a class="prev" rel="prev" href="/2023/12/02/Diffie-Hellman-%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2/">Diffie-Hellman 密钥交换</a>
             
             
-            <a class="next" rel="next" href="/2023/11/28/DES%E7%9A%84%E8%BE%93%E5%87%BA%E5%8F%8D%E9%A6%88-OFB-%E6%A8%A1%E5%BC%8F/">DES的输出反馈_OFB_模式</a>
+            <a class="next" rel="next" href="/2023/11/29/Rabin-%E4%BA%A7%E7%94%9F%E5%99%A8/">Rabin 产生器</a>
             
         </section>
 

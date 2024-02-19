@@ -17,7 +17,7 @@
 
 
 
-<title>离散指数比特产生器 | quanquan</title>
+<title>DES的输出反馈_OFB_模式 | quanquan</title>
 
 
 
@@ -196,7 +196,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">离散指数比特产生器</h1>
+            <h1 class="post-title">DES的输出反馈_OFB_模式</h1>
             
                 <div class="post-meta">
                     
@@ -205,7 +205,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">November 28, 2023&nbsp;&nbsp;17:10:02</a>
+                        Date: <a href="#">November 29, 2023&nbsp;&nbsp;8:06:53</a>
                         </span>
                     
                     
@@ -221,16 +221,17 @@
         </header>
 
         <div class="post-content">
-            <h3 id="离散指数比特产生器"><a href="#离散指数比特产生器" class="headerlink" title="离散指数比特产生器"></a>离散指数比特产生器</h3><p>离散指数分布是一种概率分布，其概率质量函数在非负整数上是指数函数。</p>
-<p>首先定义了一个名为<code>generate_exponential_bits</code>的函数，它接受两个参数：</p>
+            <h3 id="DES的输出反馈（OFB）模式"><a href="#DES的输出反馈（OFB）模式" class="headerlink" title="DES的输出反馈（OFB）模式"></a>DES的输出反馈（OFB）模式</h3><p>在这个例子中，使用Python的<code>Crypto</code>库来实现一个基于DES算法的伪随机数生成器（Pseudo-Random Number Generator，PRNG）。DES（Data Encryption Standard）是一种对称加密算法，常用于加密和解密数据。</p>
+<p><code>des_ofb_prng</code>函数接受三个参数：</p>
 <ul>
-<li>rate：指数分布的速率参数。</li>
-<li>num_bits：需要生成的二进制位数。</li>
+<li>key：用于加密的密钥。</li>
+<li>iv：初始化向量，用于控制加密过程的随机性。</li>
+<li>plaintext：需要加密的明文。</li>
 </ul>
-<p>函数的主要逻辑是生成一个包含<code>num_bits</code>个二进制位的列表<code>bits</code>。在每次循环中，首先生成一个0到1之间的均匀分布随机数<code>u</code>，然后使用离散指数分布的概率质量函数计算随机数<code>x</code>。接下来，将<code>x</code>转换为一个二进制位（0或1），并将其添加到结果列表<code>bits</code>中。最后，返回生成的二进制字符串。</p>
-<p>离散指数分布的安全性取决于速率参数<code>rate</code>的选择。在实际应用中，需要确保<code>rate</code>是足够大的值，以防止攻击者破解生成的伪随机数。</p>
-<h3 id="代码部分："><a href="#代码部分：" class="headerlink" title="代码部分："></a>代码部分：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_exponential_bits</span>(<span class="params">rate, num_bits</span>):</span><br><span class="line">    bits = []</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_bits):</span><br><span class="line">        u = random.random()  <span class="comment"># 生成0到1之间的均匀分布随机数</span></span><br><span class="line">        x = -math.log(<span class="number">1</span> - u) / rate  <span class="comment"># 从离散指数分布中生成随机数</span></span><br><span class="line">        bit = <span class="number">1</span> <span class="keyword">if</span> x &gt;= <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span>  <span class="comment"># 将随机数转换为比特</span></span><br><span class="line">        bits.append(bit)</span><br><span class="line">    <span class="keyword">return</span> bits</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line">rate = <span class="number">0.5</span>  <span class="comment"># 指数分布的速率参数</span></span><br><span class="line">num_bits = <span class="number">10</span>  <span class="comment"># 要生成的比特数量</span></span><br><span class="line">generated_bits = generate_exponential_bits(rate, num_bits)</span><br><span class="line"><span class="built_in">print</span>(generated_bits)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[1, 0, 1, 1, 1, 0, 1, 1, 1, 1]</span><br><span class="line"></span><br><span class="line">Process finished with <span class="built_in">exit</span> code 0</span><br></pre></td></tr></table></figure>
+<p>函数的主要逻辑是创建一个DES cipher对象，并设置其模式为OFB（Output Feedback）。然后，使用<code>pad</code>函数对明文进行填充，以确保其长度是DES算法的块大小（8字节）的整数倍。最后，使用cipher对象的<code>encrypt</code>方法对填充后的明文进行加密，生成伪随机数。</p>
+<p>最后生成一个随机的8字节的密钥和初始化向量。使用这个密钥和初始化向量来创建一个DES cipher对象，并设置其模式为OFB。</p>
+<h3 id="代码部分："><a href="#代码部分：" class="headerlink" title="代码部分："></a>代码部分：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pip install pycryptodome</span></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> DES</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.Padding <span class="keyword">import</span> pad, unpad</span><br><span class="line"><span class="keyword">from</span> Crypto.Random <span class="keyword">import</span> get_random_bytes</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string"># 首先生成一个随机的8字节的密钥和初始化向量。</span></span><br><span class="line"><span class="string"># 然后使用这个密钥和初始化向量来创建一个DES cipher对象，并设置其模式为OFB。</span></span><br><span class="line"><span class="string"># 最后使用这个cipher对象来加密我们的明文，生成伪随机数。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">des_ofb_prng</span>(<span class="params">key, iv, plaintext</span>):</span><br><span class="line">    cipher = DES.new(key, DES.MODE_OFB, iv=iv)</span><br><span class="line">    <span class="keyword">return</span> cipher.encrypt(pad(plaintext, DES.block_size))</span><br><span class="line"></span><br><span class="line">key = get_random_bytes(<span class="number">8</span>)  <span class="comment"># DES key should be 8 bytes</span></span><br><span class="line">iv = get_random_bytes(<span class="number">8</span>)  <span class="comment"># IV should be 8 bytes for DES</span></span><br><span class="line">plaintext = <span class="string">b&#x27;Hello, World!&#x27;</span></span><br><span class="line"></span><br><span class="line">ciphertext = des_ofb_prng(key, iv, plaintext)</span><br><span class="line"><span class="built_in">print</span>(ciphertext)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b<span class="string">&#x27;\x93\x03\xc9j\xb2T\xd9\xb08\xb2\xf7&lt;\xca\xe8\x07=&#x27;</span></span><br><span class="line"></span><br><span class="line">Process finished with <span class="built_in">exit</span> code 0</span><br></pre></td></tr></table></figure>
 
         </div>
 
@@ -264,7 +265,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%AF%94%E7%89%B9%E4%BA%A7%E7%94%9F%E5%99%A8/"># 随机比特产生器</a>
+                        <a href="/tags/%E5%9F%BA%E4%BA%8E%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95%E7%9A%84%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/"># 基于密码算法的伪随机数产生器</a>
                     
                         
                 </span>
@@ -277,10 +278,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2023/11/28/Diffie-Hellman-%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2/">Diffie-Hellman 密钥交换</a>
+                <a class="prev" rel="prev" href="/2023/11/29/ANSI-X9-17%E7%9A%84%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/">ANSI X9.17的伪随机数产生器</a>
             
             
-            <a class="next" rel="next" href="/2023/11/28/Rabin-%E4%BA%A7%E7%94%9F%E5%99%A8/">Rabin 产生器</a>
+            <a class="next" rel="next" href="/2023/11/28/%E5%BE%AA%E7%8E%AF%E5%8A%A0%E5%AF%86%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%BA%A7%E7%94%9F%E5%99%A8/">循环加密伪随机数产生器</a>
             
         </section>
 
